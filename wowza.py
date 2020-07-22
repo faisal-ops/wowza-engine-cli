@@ -10,17 +10,21 @@ parser.add_argument("-n", "--name", action='store', help='enter action')
 args = parser.parse_args()
 name = args.name
 
+# Load channel list file
+channel_path = "/home/faisal/projects/wowza" # path of channel_list.json file
+channel_file = f"{channel_path}/channel_list.json"
+
+# Load Environment Variables
+with open(channel_file, "r") as variable:
+    data = json.load(variable)
+    for key, value in data['credential'].items():
+        os.environ[key] = value
+
 # Credentials
 wowza_host = os.environ['WOWZA_HOST']
 user_name = os.environ['API_USER']
 user_pass = os.environ['API_PASSWORD']
-application_name = "live"
-
-# Load channel list file
-channel_path = "/home/faisal/projects/live/" # path of channel_list.json file
-channel_file = f"{channel_path}/channel_list.json"
-with open(channel_file, "r") as variable:
-    data = json.load(variable)
+application_name = os.environ['APP_NAME']
 
 # wowza functions to list all available stream file  
 def get_list():
@@ -76,14 +80,13 @@ if __name__ == '__main__':
     elif name == "create":
         create_stream(stream_name, channel_ip)
         
-    elif name == "createall":        
-        for key, value in data.items():
-            print("\n")
-            stream_name = key
-            print(stream_name)
-            channel_ip = value
-            print(channel_ip)
-            create_stream(stream_name, channel_ip)
+    elif name == "createmany":
+        with open(channel_file, "r") as variable:
+            data = json.load(variable)
+            for key, value in data['channel_list'].items():
+                stream_name = key
+                channel_ip = value
+                create_stream(stream_name, channel_ip)
         
     elif name == "connect":
         connect_stream()
