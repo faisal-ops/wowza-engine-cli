@@ -1,0 +1,13 @@
+{
+    "credential": {
+        "WOWZA_HOST": "localhost",
+        "API_USER": "admin",
+        "API_PASSWORD": "admin",
+        "APP_NAME": "live"
+    },
+
+    "channel_list": {
+        "COMEDY": "192.168.13.1:1358",
+        "CARTOON": "192.168.13.1:1375"
+    }
+}
